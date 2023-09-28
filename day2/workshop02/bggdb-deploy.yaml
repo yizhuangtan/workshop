@@ -27,6 +27,13 @@ spec:
         imagePullPolicy: IfNotPresent
         ports: 
         - containerPort: 3306
+        volumeMounts:
+        - name: data-vol
+          mountPath: /var/lib/mysql
+        - name: bgg-cm
+          mountPath: /opt/config
+        - name: tmp-vol
+          emptyDir: {}
 ---
 
 apiVersion: v1

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: csapp-deploy
+  namespace: codeserver
+  labels:
+    app: csapp
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: csapp
+  template: 
+    metadata: 
+      name: csapp-po
+      namespace: codeserver
+      labels:
+        app: csapp
+    spec: 
+      volumes:
+      - name: workspace-vol
+        persistentVolumeClaim:
+          claimName: csapp-pvc
+
+      containers: 
+      - name: csapp-container
+        image: linuxserver/code-server:latest
+        imagePullPolicy: IfNotPresent
+        envFrom: 
+        - configMapRef:
+            name: cs-cm
+        - secretRef:
+            name: cs-secret
+        ports: 
+        - containerPort: 8443
+        volumeMounts:
+        - name: workspace-vol
+          mountPath: /config/workspace
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: csapp-svc
+  namespace: codeserver
+  labels:
+    app: csapp
+spec:
+  type: ClusterIP
+  selector: 
+    app: csapp
+  ports:
+  - port: 8443
+    targetPort: 8443
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cs-ing
+  namespace: codeserver
+  labels:
+    app: csapp
+    name: cs-ing
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: code-137.184.249.207.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: csapp-svc
+            port:
+              number: 8443
