@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: dbns
+spec:
+  podSelector:
+    matchLabels:
+      name: db-po
+  policyTypes:
+  - Ingress
+  - Egress
+
+---
+## create one for DB just allow ingress policy only
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: access-db
+  namespace: dbns
+spec:
+  podSelector:
+    matchLabels:
+      name: db-po
+  policyTypes:
+  - Ingress
+  ingress:
+  - from: 

@@ -6,7 +6,7 @@ metadata:
 data:
   TZ: Asia/Singapore
   DEFAULT_WORKSPACE: /config/workspace
-  PROXY_DOMAIN: code-146.190.193.113.nip.io
+  PROXY_DOMAIN: code-137.184.249.207.nip.io
 ---
 apiVersion: v1
 kind: Secret

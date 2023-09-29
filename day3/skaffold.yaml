@@ -1,0 +1,19 @@
+apiVersion: skaffold/v4beta6 latest
+kind: Config 
+metadata:
+  name: dov-bear
+
+build:
+  artifacts:
+  - image: chukmunnlee/sk-dov-bear
+  context:
+  docker:
+    dockerfile: Dockerfile
+tagPolicy:
+  gitCommit:
+    variant: CommitSha
+    ignoreChanges: false
+  platforms:
+  - linux/amd64
+  - darwin/arm64
+
